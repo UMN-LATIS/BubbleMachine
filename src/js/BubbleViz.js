@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 
 import AudioFileForm from "./AudioFileForm";
 import Bubbles from "./Bubbles";
+import AnnotationTable from "./AnnotationTable";
 
 import ee from "./EventEmitter";
 

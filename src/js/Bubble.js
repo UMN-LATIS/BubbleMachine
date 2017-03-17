@@ -11,15 +11,17 @@ class Bubble extends React.Component {
       left: 0,
       top: 0
     }
+
+    //this.handleClick = this.handleClick.bind(this.props.bubbleData)
   }
 
-  handleClick = (bubble) => {
+  handleClick = () => {
     console.log("Clicked on bubble: ");
-    console.log(bubble);
-    ee.emit("audio:currentTimeDidUpdate", bubble.start_time); // tell BubbleViz component to update UI
-    ee.emit("audio:updateCurrentTimeAndPlay", bubble.start_time); // Tell AudioFileForm to update playback counter
+    console.log(this.props.bubbleData);
+    ee.emit("audio:currentTimeDidUpdate", this.props.bubbleData.start_time); // tell BubbleViz component to update UI
+    ee.emit("audio:updateCurrentTimeAndPlay", this.props.bubbleData.start_time); // Tell AudioFileForm to update playback counter
 
-    ee.emit("bubble:updateActiveBubble", bubble);
+    ee.emit("bubble:updateActiveBubble", this.props.bubbleData);
   }
 
   render() {
@@ -51,7 +53,7 @@ class Bubble extends React.Component {
     };
 
     return(
-      <div className={bubbleClass} style={divStyle} onClick={ (bubble) => this.handleClick(bubble)} > <p>{this.props.bubbleData.title}</p> </div>
+      <div className={bubbleClass} style={divStyle} onClick={this.handleClick} > <p>{this.props.bubbleData.title}</p> </div>
     )
   }
 
