@@ -43,7 +43,6 @@ class BubbleViz extends React.Component {
     ee.off("alert");
     ee.off("audio:updateDuration");
     ee.off("audio:currentTimeDidUpdate");
-    ee.off("audio:updateCurrentTime");
   }
 
   loadAnnotationsFromLocalStorage = () => {
@@ -83,6 +82,10 @@ class BubbleViz extends React.Component {
 
         <div className="row">
           <AudioFileForm audioDuration={this.state.audio_duration} />
+        </div>
+
+        <div className="row">
+          <AnnotationTable data={this.state.data} />
         </div>
       </div>
     )

@@ -40,5 +40,6 @@ JSX comments are weird:
 
 |-- App
     |-- BubbleViz
-        |-- Bubbles - renders the actual visualization containing the clickable bubbles
-        |-- AudioFileForm - allows the user to upload an audio file
+        |-- Bubbles - renders the entire div for the bubble visualization, and resizes the visualization to fit the browser width
+            |-- Bubble - renders a single bubble within the visualization
+        |-- AudioFileForm - allows the user to upload an audio file, and emits events to update the audio duration and current time in BubbleViz component, which then gets passed to other components

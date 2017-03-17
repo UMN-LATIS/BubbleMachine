@@ -14,6 +14,8 @@ class AudioFileForm extends React.Component {
       current_time: 0.0
     }
 
+    // Not sure if we need these if we're using arrow functions "=>" in the function definitions below,
+    // but we'll put them here to be safe
     this.handleFile = this.handleFile.bind(this)
     this.startLoadingAudio = this.startLoadingAudio.bind(this)
     this.doneLoadingMetadata = this.doneLoadingMetadata.bind(this)
