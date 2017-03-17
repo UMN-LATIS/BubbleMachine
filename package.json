@@ -1,0 +1,30 @@
+{
+  "name": "bubblemachine",
+  "version": "3.0.0",
+  "description": "audio annotation tool",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alison Link",
+  "license": "AGPL-3.0",
+  "devDependencies": {
+    "babel": "^6.5.2",
+    "babel-core": "^6.18.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-react": "^6.16.0",
+    "babel-preset-stage-1": "^6.16.0",
+    "babelify": "^7.3.0",
+    "browserify": "^13.1.1",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "dependencies": {
+    "event-emitter": "^0.3.4",
+    "file-saver": "^1.3.3",
+    "react": "^15.3.2",
+    "react-color": "^2.4.0",
+    "react-dom": "^15.3.2"
+  }
+}
