@@ -20,17 +20,14 @@ class Bubble extends React.Component {
     console.log(this.props.bubbleData);
     ee.emit("audio:currentTimeDidUpdate", this.props.bubbleData.start_time); // tell BubbleViz component to update UI
     ee.emit("audio:updateCurrentTimeAndPlay", this.props.bubbleData.start_time); // Tell AudioFileForm to update playback counter
-
-    ee.emit("bubble:updateActiveBubble", this.props.bubbleData);
   }
 
   render() {
     var bubbleClass = "bubble";
     bubbleClass += " " + this.props.bubbleData.shape;
 
-    // If this bubble is the active bubble, update it on the fly if user makes changes while editing
-    if (this.props.active) {
-      bubbleClass += " active";
+    if (this.props.highlight) {
+      bubbleClass += " highlight";
     }
 
     var startPosition = Math.floor(this.props.bubbleData.start_time / this.props.audioDuration * this.props.vizWidth);

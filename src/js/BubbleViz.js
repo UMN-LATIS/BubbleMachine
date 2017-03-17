@@ -4,6 +4,7 @@ import ReactDOM from "react-dom";
 import AudioFileForm from "./AudioFileForm";
 import Bubbles from "./Bubbles";
 import AnnotationTable from "./AnnotationTable";
+import AnnotationFrom from "./AnnotationForm";
 
 import ee from "./EventEmitter";
 
@@ -15,15 +16,13 @@ class BubbleViz extends React.Component {
 
     this.state = {
       data: [],
-      active_bubble_data: { id: "" },
       edit_bubble_data: undefined,
       alert: { type: false }
     }
   }
 
   componentDidMount() {
-    // Dummy data
-    this.loadAnnotationsFromLocalStorage();
+    this.loadBubblesFromLocalStorage();
 
 		ee.on("alert", (new_alert) => {
 			this.setState({ alert: new_alert });
@@ -34,8 +33,16 @@ class BubbleViz extends React.Component {
     });
 
     ee.on("audio:currentTimeDidUpdate", (currentTime) => {
-      console.log("Updating time in BubbleViz to: " + currentTime);
+      //console.log("Updating time in BubbleViz to: " + currentTime);
       this.setState({ current_time: currentTime });
+    });
+
+    ee.on("bubble:editBubble", (bubble) => {
+      this.setState({ edit_bubble_data: bubble });
+    });
+
+    ee.on("bubble:deleteBubble", (bubble) => {
+      this.deleteBubble(bubble);
     });
 
   }
@@ -46,16 +53,51 @@ class BubbleViz extends React.Component {
     ee.off("audio:currentTimeDidUpdate");
   }
 
-  loadAnnotationsFromLocalStorage = () => {
-    this.setState({
-      data: [
+  loadBubblesFromLocalStorage = () => {
+    // If "bubbleMachineData" item doesn't already exist in localStorage, create a blank array and save it to localStorage to use
+    if (localStorage.getItem("annotations") == null){
+      //var allBubbles = [];
+
+      // Dummy data
+      var allBubbles = [
         { id: 1 , title: "test bubble 1", color: "#B80000", shape: "circle", level: 1, start_time: 10, stop_time: 20 },
         { id: 2 , title: "test bubble 2", color: "#B80000", shape: "circle", level: 2, start_time: 20, stop_time: 30 },
         { id: 3 , title: "test bubble 3", color: "#B80000", shape: "circle", level: 3, start_time: 30, stop_time: 40 },
         { id: 4 , title: "test bubble 4", color: "#B80000", shape: "circle", level: 4, start_time: 40, stop_time: 50 },
         { id: 5 , title: "test bubble 5", color: "#B80000", shape: "circle", level: 5, start_time: 50, stop_time: 60 }
       ]
-    });
+
+      localStorage.setItem("bubbleMachineData", JSON.stringify(allBubbles));
+    } else {
+      // else if "bubbleMachineData" item already exists in localStorage, load that data
+      var allBubbles = JSON.parse(localStorage.getItem("bubbleMachineData"));
+    }
+
+    this.setState({ data: allBubbles });
+  }
+
+  deleteBubble = (bubble) => {
+    console.log("Deleting bubble with id = " + bubble.id);
+
+    // get the existing bubbles string from LocalStorage
+    var allBubbles = JSON.parse(localStorage.getItem("bubbleMachineData"));
+
+    // find index of annotation to be updated
+    function findIndexById() {
+      for (var i = 0; i < allBubbles.length; i++) {
+        if (allBubbles[i].id == bubble.id) {
+          return i;
+        }
+      }
+      return null;
+    }
+
+    var bubble_index = findIndexById();
+    console.log("This bubble to delete is located at index: " + bubble_index);
+
+    allBubbles.splice(bubble_index, 1); // splice off the bubble from the full bubbles array
+    this.setState({ data: allBubbles }); // set React state to re-render everything without the deleted bubble
+    localStorage.setItem("bubbleMachineData", JSON.stringify(allBubbles)); // save the allBubbles array (without the deleted bubble) back to LocalStorage in the form of a JSON string
   }
 
   render() {

@@ -13,9 +13,28 @@ class AnnotationTable extends React.Component {
   }
 
   componentDidMount () {
-    ee.on("bubble:updateActiveBubble", (activeBubble) => {
-      this.setState({ active_bubble: activeBubble });
-    });
+
+  }
+
+  handleClick = (bubble) => {
+    console.log("Clicked on table row for bubble: ");
+    console.log(bubble);
+    ee.emit("audio:currentTimeDidUpdate", bubble.start_time); // tell BubbleViz component to update UI
+    ee.emit("audio:updateCurrentTimeAndPlay", bubble.start_time); // Tell AudioFileForm to update playback counter
+  }
+
+  handleEdit = (bubble) => {
+    console.log("Clicked on table row to edit bubble: ");
+    console.log(bubble);
+    ee.emit("bubble:editBubble", bubble);
+  }
+
+  handleDelete = (bubble) => {
+    var user_confirm = confirm("Are you sure you want to delete this bubble?");
+
+    if (user_confirm) {
+      ee.emit("bubble:deleteBubble", bubble);
+    }
   }
 
   render() {
@@ -49,9 +68,9 @@ class AnnotationTable extends React.Component {
           <td>{bubble.title}</td>
           <td>{bubble.start_time}</td>
           <td>{bubble.stop_time}</td>
-          <td><a><i className="glyphicon glyphicon-play"/></a> </td>
-          <td><a> <i className="glyphicon glyphicon-pencil"/></a> </td>
-          <td><a> <i className="glyphicon glyphicon-trash"/></a> </td>
+          <td><a onClick={() => this.handleClick(bubble)} ><i className="glyphicon glyphicon-play"/></a> </td>
+          <td><a onClick={() => this.handleEdit(bubble)}> <i className="glyphicon glyphicon-pencil"/></a> </td>
+          <td><a onClick={() => this.handleDelete(bubble)}> <i className="glyphicon glyphicon-trash"/></a> </td>
         </tr>
       )
     });

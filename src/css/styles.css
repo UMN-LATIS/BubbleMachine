@@ -58,10 +58,16 @@ p.user-tips::first-letter {
 .square {
 }
 
-.bubble.active {
+.bubble.highlight {
   opacity: 1.0;
   box-shadow: 5px -5px 5px #888888;
   border-color: #555;
+}
+
+.bubble.editing {
+  opacity: 1.0;
+  box-shadow: 5px -5px 5px #888888;
+  border-color: #ffcc33;
 }
 
 .bubble-row.selected {
