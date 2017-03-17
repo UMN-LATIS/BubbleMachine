@@ -15,11 +15,21 @@ class Bubbles extends React.Component {
     }
   }
 
+  componentDidMount () {
+    this.resizeViz();
+    window.addEventListener('resize', this.resizeViz);
+  }
+
+  resizeViz = () => {
+    if (!(this.refs.bubbleVisualization.clientWidth == undefined)) {
+      this.setState({ viz_width: this.refs.bubbleVisualization.clientWidth });
+    }
+  }
+
   handleClick = (bubble) => {
     console.log(bubble);
     ee.emit("audio:currentTimeDidUpdate", bubble.start_time); // tell BubbleViz component to update UI
     ee.emit("audio:updateCurrentTimeAndPlay", bubble.start_time); // Tell AudioFileForm to update playback counter
-    //ee.emit("audio:play"); // Tell AudioFileForm to start playback
   }
 
   render = () => {

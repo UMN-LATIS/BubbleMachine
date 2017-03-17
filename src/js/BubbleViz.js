@@ -37,13 +37,6 @@ class BubbleViz extends React.Component {
       this.setState({ current_time: currentTime });
     });
 
-    {/*
-    ee.on("audio:updateCurrentTime", (currentTime) => {
-      console.log("Updating time to: " + currentTime);
-      this.setState({ current_time: currentTime });
-    });
-    */}
-
   }
 
   componentWillUnmount() {
