@@ -43,10 +43,9 @@ class BubbleViz extends React.Component {
       this.createBubble(bubble);
     });
 
-    /*
     ee.on("bubble:updateBubble", (bubble) => {
+      this.updateBubble(bubble);
     });
-    */
 
     ee.on("bubble:deleteBubble", (bubble) => {
       this.deleteBubble(bubble);
@@ -58,6 +57,9 @@ class BubbleViz extends React.Component {
     ee.off("alert");
     ee.off("audio:updateDuration");
     ee.off("audio:currentTimeDidUpdate");
+    ee.off("bubble:createBubble");
+    ee.off("bubble:updateBubble");
+    ee.off("bubble:deleteBubble");
   }
 
   loadBubblesFromLocalStorage = () => {
@@ -90,6 +92,27 @@ class BubbleViz extends React.Component {
     allBubbles.push(bubble); // push the new annotation into the annotations string
     this.setState({ data: allBubbles }); // set React state to re-render everything with updated bubbles
     localStorage.setItem("bubbleMachineData", JSON.stringify(allBubbles)); // save the updated bubbles string back to LocalStorage
+  }
+
+  updateBubble = (bubble) => {
+    console.log("Updating bubble with id = " + bubble.id);
+    var allBubbles = JSON.parse(localStorage.getItem("bubbleMachineData")); // get the existing bubbles string from LocalStorage
+
+    // find index of annotation to be updated
+    function findIndexById() {
+      for (var i = 0; i < allBubbles.length; i++) {
+        if (allBubbles[i].id == bubble.id) {
+          return i;
+        }
+      }
+      return null;
+    }
+
+    var bubble_index = findIndexById();
+    console.log("This bubble is located at index: " + bubble_index);
+    allBubbles.splice(bubble_index, 1 , bubble); // splice off the old version of the bubble from the allBubbles array & re-append the updated bubble to the end of the allBubbles array
+    this.setState({ data: allBubbles }); // set React state to re-render allBubbles with the bubble update applied
+    localStorage.setItem("bubbleMachineData", JSON.stringify(allBubbles)); // save the updated allBubbles array back to LocalStorage in the form of a JSON string
   }
 
   deleteBubble = (bubble) => {
