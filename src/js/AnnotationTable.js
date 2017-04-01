@@ -37,6 +37,14 @@ class AnnotationTable extends React.Component {
     }
   }
 
+  handleDeleteAll = () => {
+    var user_confirm = confirm("Are you sure you want to delete all annotations?");
+
+    if(user_confirm) {
+      ee.emit("bubble:deleteAllBubbles");
+    }
+  }
+
   render() {
     // Sort the annotations data by start_time before prepping the table rows for render
     var sortedBubbles = this.props.data;
@@ -78,7 +86,6 @@ class AnnotationTable extends React.Component {
     return (
       <div>
         <div className="annotationTable">
-
               <table className="table table-hover">
                 <thead>
                   <tr>
@@ -98,8 +105,15 @@ class AnnotationTable extends React.Component {
                   {bubbleTableRows}
                 </tbody>
               </table>
-
         </div>
+
+        <div className="row">
+          <hr/>
+          <div className="col-md-2 col-md-offset-10 col-sm-2 col-sm-offset-10">
+            <a className="btn btn-danger" onClick={this.handleDeleteAll} ><i className="glyphicon glyphicon-trash"/> Delete All</a>
+          </div>
+        </div>
+
       </div>
 
     )

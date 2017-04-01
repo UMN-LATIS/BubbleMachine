@@ -51,6 +51,10 @@ class BubbleViz extends React.Component {
       this.deleteBubble(bubble);
     });
 
+    ee.on("bubble:deleteAllBubbles", (bubble) => {
+      this.deleteAllBubbles();
+    });
+
   }
 
   componentWillUnmount() {
@@ -60,6 +64,7 @@ class BubbleViz extends React.Component {
     ee.off("bubble:createBubble");
     ee.off("bubble:updateBubble");
     ee.off("bubble:deleteBubble");
+    e.off("bubble:deleteAllBubbles");
   }
 
   loadBubblesFromLocalStorage = () => {
@@ -135,6 +140,12 @@ class BubbleViz extends React.Component {
     allBubbles.splice(bubble_index, 1); // splice off the bubble from the full bubbles array
     this.setState({ data: allBubbles }); // set React state to re-render everything without the deleted bubble
     localStorage.setItem("bubbleMachineData", JSON.stringify(allBubbles)); // save the allBubbles array (without the deleted bubble) back to LocalStorage in the form of a JSON string
+  }
+
+  deleteAllBubbles = () => {
+    var allBubbles = [];
+    this.setState({ data: allBubbles });
+    localStorage.setItem("bubbleMachineData", JSON.stringify(allBubbles));
   }
 
   render() {
