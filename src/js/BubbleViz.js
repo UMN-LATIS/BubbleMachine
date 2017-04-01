@@ -38,8 +38,7 @@ class BubbleViz extends React.Component {
     });
 
     /*
-    ee.on("bubble:editBubble", (bubble) => {
-      this.setState({ edit_bubble_data: bubble });
+    ee.on("bubble:saveNewBubble", (bubble) => {
     });
     */
 
@@ -130,7 +129,7 @@ class BubbleViz extends React.Component {
         </div>
 
         <div className="row">
-          <AnnotationForm />
+          <AnnotationForm audioDuration={this.state.audio_duration} />
         </div>
 
         <div className="row">

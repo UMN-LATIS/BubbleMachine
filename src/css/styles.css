@@ -64,10 +64,10 @@ p.user-tips::first-letter {
   border-color: #555;
 }
 
-.bubble.editing {
-  opacity: 1.0;
+.bubble.preview {
+  opacity: 0.5;
   box-shadow: 5px -5px 5px #888888;
-  border-color: #ffcc33;
+  border-color: #555;
 }
 
 .bubble-row.selected {

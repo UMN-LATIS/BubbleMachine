@@ -37,25 +37,29 @@ class AnnotationForm extends React.Component {
     var editing_bubble = this.state.edit_bubble_data;
     editing_bubble.shape = e.target.value;
     this.setState({ edit_bubble_data: editing_bubble });
+    this.updatePreview();
   }
 
   onLevelChange = (e) =>  {
     var editing_bubble = this.state.edit_bubble_data;
     editing_bubble.level = e.target.value;
     this.setState({ edit_bubble_data: editing_bubble });
+    this.updatePreview();
   }
 
   onTitleChange = (e) =>  {
     var editing_bubble = this.state.edit_bubble_data;
     editing_bubble.title = e.target.value;
     this.setState({ edit_bubble_data: editing_bubble });
+    this.updatePreview();
   }
 
   onColorChange = (color) => {
     console.log(color);
     var editing_bubble = this.state.edit_bubble_data;
-    editing_bubble.color = color;
+    editing_bubble.color = color.hex;
     this.setState({ edit_bubble_data: editing_bubble });
+    this.updatePreview();
   }
 
   // Function that is triggered when the user clicks the "Set Start" button
@@ -65,6 +69,7 @@ class AnnotationForm extends React.Component {
     var editing_bubble = this.state.edit_bubble_data;
     editing_bubble.start_time = startTime;
     this.setState({ edit_bubble_data: editing_bubble });
+    this.updatePreview();
   }
 
   // Function that is triggered when the user clicks the "Set Stop" button
@@ -74,6 +79,7 @@ class AnnotationForm extends React.Component {
     var editing_bubble = this.state.edit_bubble_data;
     editing_bubble.stop_time = stopTime;
     this.setState({ edit_bubble_data: editing_bubble });
+    this.updatePreview();
   }
 
   // Function that is triggered when the user manually changes the numeric value in the start time input box
@@ -81,7 +87,7 @@ class AnnotationForm extends React.Component {
     var editing_bubble = this.state.edit_bubble_data;
     editing_bubble.start_time = e.target.value;
     this.setState({ edit_bubble_data: editing_bubble });
-    //emitter.emit("bubble:updatePreview", );
+    this.updatePreview();
   }
 
   // Function that is triggered when the user manually changes the numeric value in the stop time input box
@@ -89,10 +95,12 @@ class AnnotationForm extends React.Component {
     var editing_bubble = this.state.edit_bubble_data;
     editing_bubble.start_time = e.target.value;
     this.setState({ edit_bubble_data: editing_bubble });
+    this.updatePreview();
   }
 
   clearForm = () => {
-    var editing_bubble = { // set state.edit_bubble_data back to the default data we want to use for new bubbles
+    // Set state.edit_bubble_data back to the default data we want to use for new bubbles
+    var editing_bubble = {
       id: "",
       title: "",
       color: "#00ff00",
@@ -103,6 +111,18 @@ class AnnotationForm extends React.Component {
     }
 
     this.setState({ form_hidden: true, current_form_action: "Add Bubble", edit_bubble_data: editing_bubble });
+
+    var preview_bubble = { // create an empty "ghost" preview bubble
+      id: "",
+      title: "",
+      color: "",
+      shape: "",
+      level: "",
+      start_time: "",
+      stop_time: ""
+    }
+
+    ee.emit("bubble:updateBubblePreview", preview_bubble);
   }
 
   clickPanel = () => {
@@ -114,10 +134,14 @@ class AnnotationForm extends React.Component {
 
       var editing_bubble = this.state.edit_bubble_data;
       editing_bubble.start_time = startTime;
-
       this.setState({ form_hidden: false, edit_bubble_data: editing_bubble });
+      this.updatePreview();
     }
     // Otherwise, do nothing special when the panel is clicked
+  }
+
+  updatePreview = () => {
+    ee.emit("bubble:updateBubblePreview", this.state.edit_bubble_data);
   }
 
 

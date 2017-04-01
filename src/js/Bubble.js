@@ -30,6 +30,10 @@ class Bubble extends React.Component {
       bubbleClass += " highlight";
     }
 
+    if (this.props.preview) {
+      bubbleClass += " preview";
+    }
+
     var startPosition = Math.floor(this.props.bubbleData.start_time / this.props.audioDuration * this.props.vizWidth);
     var startPositionChecked = isNaN(startPosition) ? 0 : startPosition; // set as 0 if audio isn't loaded to avoid weird React error
     var bubbleWidth = Math.floor((this.props.bubbleData.stop_time - this.props.bubbleData.start_time) / this.props.audioDuration * this.props.vizWidth);
