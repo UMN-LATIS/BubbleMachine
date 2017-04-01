@@ -4,7 +4,7 @@ import ReactDOM from "react-dom";
 import AudioFileForm from "./AudioFileForm";
 import Bubbles from "./Bubbles";
 import AnnotationTable from "./AnnotationTable";
-import AnnotationFrom from "./AnnotationForm";
+import AnnotationForm from "./AnnotationForm";
 
 import ee from "./EventEmitter";
 
@@ -37,9 +37,11 @@ class BubbleViz extends React.Component {
       this.setState({ current_time: currentTime });
     });
 
+    /*
     ee.on("bubble:editBubble", (bubble) => {
       this.setState({ edit_bubble_data: bubble });
     });
+    */
 
     ee.on("bubble:deleteBubble", (bubble) => {
       this.deleteBubble(bubble);
@@ -125,6 +127,10 @@ class BubbleViz extends React.Component {
 
         <div className="row">
           <AudioFileForm audioDuration={this.state.audio_duration} />
+        </div>
+
+        <div className="row">
+          <AnnotationForm />
         </div>
 
         <div className="row">

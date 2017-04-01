@@ -43,3 +43,4 @@ JSX comments are weird:
         |-- Bubbles - renders the entire div for the bubble visualization, and resizes the visualization to fit the browser width
             |-- Bubble - renders a single bubble within the visualization
         |-- AudioFileForm - allows the user to upload an audio file, and emits events to update the audio duration and current time in BubbleViz component, which then gets passed to other components
+        |-- AnnotationForm - lets the user edit the bubble that is currently selected for editing
