@@ -37,8 +37,14 @@ class BubbleViz extends React.Component {
       this.setState({ current_time: currentTime });
     });
 
+    ee.on("bubble:createBubble", (bubble) => {
+      console.log("Creating a new bubble: ");
+      console.log(bubble);
+      this.createBubble(bubble);
+    });
+
     /*
-    ee.on("bubble:saveNewBubble", (bubble) => {
+    ee.on("bubble:updateBubble", (bubble) => {
     });
     */
 
@@ -56,10 +62,11 @@ class BubbleViz extends React.Component {
 
   loadBubblesFromLocalStorage = () => {
     // If "bubbleMachineData" item doesn't already exist in localStorage, create a blank array and save it to localStorage to use
-    if (localStorage.getItem("annotations") == null){
-      //var allBubbles = [];
+    if (localStorage.getItem("bubbleMachineData") == null){
+      var allBubbles = [];
 
       // Dummy data
+      /*
       var allBubbles = [
         { id: 1 , title: "test bubble 1", color: "#B80000", shape: "circle", level: 1, start_time: 10, stop_time: 20 },
         { id: 2 , title: "test bubble 2", color: "#B80000", shape: "circle", level: 2, start_time: 20, stop_time: 30 },
@@ -67,6 +74,7 @@ class BubbleViz extends React.Component {
         { id: 4 , title: "test bubble 4", color: "#B80000", shape: "circle", level: 4, start_time: 40, stop_time: 50 },
         { id: 5 , title: "test bubble 5", color: "#B80000", shape: "circle", level: 5, start_time: 50, stop_time: 60 }
       ]
+      */
 
       localStorage.setItem("bubbleMachineData", JSON.stringify(allBubbles));
     } else {
@@ -77,11 +85,16 @@ class BubbleViz extends React.Component {
     this.setState({ data: allBubbles });
   }
 
+  createBubble = (bubble) => {
+    var allBubbles = JSON.parse(localStorage.getItem("bubbleMachineData")); // get the existing bubbles string from LocalStorage
+    allBubbles.push(bubble); // push the new annotation into the annotations string
+    this.setState({ data: allBubbles }); // set React state to re-render everything with updated bubbles
+    localStorage.setItem("bubbleMachineData", JSON.stringify(allBubbles)); // save the updated bubbles string back to LocalStorage
+  }
+
   deleteBubble = (bubble) => {
     console.log("Deleting bubble with id = " + bubble.id);
-
-    // get the existing bubbles string from LocalStorage
-    var allBubbles = JSON.parse(localStorage.getItem("bubbleMachineData"));
+    var allBubbles = JSON.parse(localStorage.getItem("bubbleMachineData")); // get the existing bubbles string from LocalStorage
 
     // find index of annotation to be updated
     function findIndexById() {

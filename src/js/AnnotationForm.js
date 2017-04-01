@@ -112,7 +112,7 @@ class AnnotationForm extends React.Component {
 
     this.setState({ form_hidden: true, current_form_action: "Add Bubble", edit_bubble_data: editing_bubble });
 
-    var preview_bubble = { // create an empty "ghost" preview bubble
+    var preview_bubble = { // reset to an empty "ghost" preview bubble
       id: "",
       title: "",
       color: "",
@@ -142,6 +142,57 @@ class AnnotationForm extends React.Component {
 
   updatePreview = () => {
     ee.emit("bubble:updateBubblePreview", this.state.edit_bubble_data);
+  }
+
+  handleSubmit = (e) => {
+    console.log(e);
+    e.preventDefault();
+
+    // catch errors in form fields
+    if (this.state.edit_bubble_data.shape == "") {
+      alert ("Make sure you set a shape before you save!");
+    } else if (this.state.edit_bubble_data.color == undefined || this.state.edit_bubble_data.color == "") {
+      alert ("Make sure you set a color before you save!");
+    } else if (!(/^#[0-9A-F]{6}$/i.test(this.state.edit_bubble_data.color))) {
+      alert ("Please select a valid hex color before you save!  Not sure what a hex color is?  Visit http://www.color-hex.com/ for examples of valid hex colors you can use.");
+    } else if (this.state.edit_bubble_data.level == "") {
+      alert ("Make sure you set a level before you save!");
+    } else if (this.state.edit_bubble_data.start_time == "" || this.state.edit_bubble_data.start_time == undefined || this.state.edit_bubble_data.start_time < 0) {
+      alert ("Make sure you set a valid start time before you save!");
+    } else if (this.state.edit_bubble_data.stop_time == "" || this.state.edit_bubble_data.stop_time == undefined || this.state.edit_bubble_data.stop_time < 0) {
+      alert ("Make sure you set a valid stop time before you save!");
+    } else if (parseFloat(this.state.edit_bubble_data.start_time) > parseFloat(this.props.audioDuration)) {
+      alert("Make sure your start time is set before the end of your audio file!");
+    } else if (parseFloat(this.state.edit_bubble_data.stop_time) > parseFloat(this.props.audioDuration)) {
+      alert("Make sure your stop time is set before the end of your audio file!");
+    } else if (parseFloat(this.state.edit_bubble_data.stop_time) <= parseFloat(this.state.edit_bubble_data.start_time)) {
+      alert("Make sure you set a stop time that is later than the start time!");
+    } else if (this.state.edit_bubble_data.title.length > 100) {
+      // Right now, maxLength setting on the title input field is enforcing a 100 character limit.
+      // Alternatively, we could manually shorten the title here and throw an alert instead.
+      //this.props.alert({ type: "danger", text: "Your bubble's title was longer than 100 characters! We've trimmed it to fit into the visualization.", icon: "glyphicon glyphicon-warning-sign" });
+    } else {
+      // If there are no errors in the form inputs, we can proceed to saving the bubble...
+
+      // If we're adding a new bubble, then create a new id and emit an event to save it as a new bubble
+      if (this.state.current_form_action == "Add Bubble") {
+        var newBubbleID = new Date().getTime();
+        var editing_bubble = this.state.edit_bubble_data;
+        editing_bubble.id = newBubbleID;
+        ee.emit("bubble:createBubble", editing_bubble);
+      } else if (this.state.current_form_action == "Edit Bubble") {
+        // If we're currently editing a bubble, then emit an event to update the existing bubble
+        ee.emit("bubble:updateBubble", this.state.edit_bubble_data);
+      } else {
+        alert("Sorry! Something went wrong. Clearing the form so you can try again.");
+        this.clearForm();
+      }
+
+      // Once we've saved the bubble, clear the form
+      this.clearForm();
+
+      return false;
+    }
   }
 
 
@@ -266,7 +317,7 @@ class AnnotationForm extends React.Component {
                 </div>
 
                 <div className="col-sm-2">
-                  <button className="btn btn-success btn-block" type="button" >Save</button>
+                  <button className="btn btn-success btn-block" type="button" onClick={this.handleSubmit} >Save</button>
                 </div>
 
               </div>

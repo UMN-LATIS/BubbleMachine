@@ -26,6 +26,7 @@ class Bubble extends React.Component {
     var bubbleClass = "bubble";
     bubbleClass += " " + this.props.bubbleData.shape;
 
+    // Why isn't highlight getting applied to square bubbles?
     if (this.props.highlight) {
       bubbleClass += " highlight";
     }
