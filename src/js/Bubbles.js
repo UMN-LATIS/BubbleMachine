@@ -27,6 +27,7 @@ class Bubbles extends React.Component {
     this.resizeViz(); // call resizeViz() function to set the viz_width to equal the current window width
     window.addEventListener('resize', this.resizeViz); // if the user resizes their browser window, reset the viz_width
 
+    // When the AnnotationForm emits a "bubble:updateBubblePreview" event, change the state in this component to reflect the changes and display them in previewBubble
     ee.on("bubble:updateBubblePreview", (bubble) => {
       console.log("Updating preview!");
       this.setState({ preview_bubble_data: bubble });
@@ -48,11 +49,14 @@ class Bubbles extends React.Component {
     var bubbleNodes = this.props.data.map((bubble) => {
       // If the current playback time is within the bubble's time span, highlight the bubble by marking it highlight={true}
       if (bubble.start_time < this.props.currentTime && bubble.stop_time > this.props.currentTime) {
+        //console.log("Current time is: ");
+        //console.log(this.props.currentTime);
+        //console.log("Highlighting bubble w/ start_time " + bubble.start_time + " and stop_time " + bubble.stop_time);
         return (
           <Bubble key={bubble.id} bubbleData={bubble} highlight={true} preview={false} audioDuration={this.props.audioDuration} vizWidth={this.state.viz_width} />
         )
       } else {
-        // Otherwise, return a bubble node for the bubble marked as active={false}
+        // Otherwise, return a bubble node for the bubble marked as highlight={false}
         return (
           <Bubble key={bubble.id} bubbleData={bubble} highlight={false} preview={false} audioDuration={this.props.audioDuration} vizWidth={this.state.viz_width} />
         )
@@ -60,9 +64,13 @@ class Bubbles extends React.Component {
     });
 
     // On top of the existing bubbles, also show a preview of the bubble that is
-    // currently being edited/added.  This preview acts like a "ghost" bubble that
-    // displays as long as something is being edited/added, but disappears or turns
-    // into a "real" bubble once it is saved (via BubbleViz component) or cancelled.
+    // currently being edited/added. Use a dummy key of "999" to display this bubble,
+    // since this key will never interfere with the actual ids of real, saved bubbles.
+    // (Real bubble ids are set to the current datetime string of when they were first
+    // saved, so will always be longer than "999".) This preview acts like a "ghost"
+    // bubble that displays as long as something is being edited/added, but it gets
+    // reset when the user clicks "Cancel" in the AnnotationForm, or it turns into a
+    // "real" bubble once it is saved via the BubbleViz component.
     var previewBubble = <Bubble key="999" bubbleData={this.state.preview_bubble_data} highlight={false} preview={true} audioDuration={this.props.audioDuration} vizWidth={this.state.viz_width} />;
 
     return (

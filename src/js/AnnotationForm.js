@@ -93,7 +93,7 @@ class AnnotationForm extends React.Component {
   // Function that is triggered when the user manually changes the numeric value in the stop time input box
   onStopTimeChange = (e) => {
     var editing_bubble = this.state.edit_bubble_data;
-    editing_bubble.start_time = e.target.value;
+    editing_bubble.stop_time = e.target.value;
     this.setState({ edit_bubble_data: editing_bubble });
     this.updatePreview();
   }
