@@ -148,7 +148,7 @@ class AnnotationForm extends React.Component {
     console.log(e);
     e.preventDefault();
 
-    // catch errors in form fields
+    // Catch errors in form fields before saving...
     if (this.state.edit_bubble_data.shape == "") {
       alert ("Make sure you set a shape before you save!");
     } else if (this.state.edit_bubble_data.color == undefined || this.state.edit_bubble_data.color == "") {
@@ -168,7 +168,7 @@ class AnnotationForm extends React.Component {
     } else if (parseFloat(this.state.edit_bubble_data.stop_time) <= parseFloat(this.state.edit_bubble_data.start_time)) {
       alert("Make sure you set a stop time that is later than the start time!");
     } else if (this.state.edit_bubble_data.title.length > 100) {
-      // Right now, maxLength setting on the title input field is enforcing a 100 character limit.
+      // Right now, the maxLength setting on the title input field is enforcing a 100 character limit.
       // Alternatively, we could manually shorten the title here and throw an alert instead.
       //this.props.alert({ type: "danger", text: "Your bubble's title was longer than 100 characters! We've trimmed it to fit into the visualization.", icon: "glyphicon glyphicon-warning-sign" });
     } else {
@@ -193,6 +193,38 @@ class AnnotationForm extends React.Component {
 
       return false;
     }
+  }
+
+  // Audio playback/preview functions
+
+  playFromStartTime = () => {
+    var playstart = this.state.edit_bubble_data.start_time;
+    var playstop = parseFloat(this.state.edit_bubble_data.start_time) + 3.0;
+    this.playSnippet(playstart, playstop);
+  }
+
+  playToStopTime = () => {
+    var playstart = parseFloat(this.state.edit_bubble_data.stop_time) - 3.0;
+    var playstop = this.state.edit_bubble_data.stop_time;
+    this.playSnippet(playstart, playstop);
+  }
+
+  playSnippet = (playstart, playstop) => {
+    console.log("Playing from " + playstart + " to " + playstop);
+
+    var audio = ReactDOM.findDOMNode(audioPlayer);
+
+    audio.currentTime = playstart;
+
+    var playStop = function(e){
+      if (audio.currentTime >= playstop) {
+          audio.pause();
+          audio.removeEventListener('timeupdate', playStop, false);
+      }
+    }
+
+    audio.addEventListener('timeupdate', playStop, false);
+    audio.play();
   }
 
 
@@ -290,7 +322,7 @@ class AnnotationForm extends React.Component {
 
                     <span className="input-group-btn">
                       <a className="btn btn-default" >
-                        <i className="glyphicon glyphicon-step-forward" ></i>
+                        <i className="glyphicon glyphicon-step-forward" onClick={this.playFromStartTime} ></i>
                       </a>
                     </span>
                   </div>
@@ -300,7 +332,7 @@ class AnnotationForm extends React.Component {
                   <div className="input-group">
                     <span className="input-group-btn">
                       <a className="btn btn-default" >
-                        <i className="glyphicon glyphicon-step-forward" ></i>
+                        <i className="glyphicon glyphicon-step-forward" onClick={this.playToStopTime} ></i>
                       </a>
                     </span>
 
