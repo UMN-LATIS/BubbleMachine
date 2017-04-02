@@ -31,13 +31,8 @@ class AudioFileForm extends React.Component {
       ee.emit("alert", alert);
 
       // Listen for other components telling AudioFileForm to update currentTime and/or trigger playback...
-
       ee.on("audio:updateCurrentTime", (currentTime) => {
         this.setState({ current_time: currentTime });
-      });
-
-      ee.on("audio:play", () => {
-        this.playAudio();
       });
 
       ee.on("audio:updateCurrentTimeAndPlay", (currentTime) => {
@@ -50,7 +45,22 @@ class AudioFileForm extends React.Component {
         });
       });
 
+      ee.on("audio:play", () => {
+        this.playAudio();
+      });
+
+      ee.on("audio:pause", () => {
+        this.pauseAudio();
+      });
+
     }, 2000);
+  }
+
+  componentWillUnmount() {
+    ee.off("audio:updateCurrentTime");
+    ee.off("audio:updateCurrentTimeAndPlay");
+    ee.off("audio:play");
+    ee.off("audio:pause");
   }
 
   handleSubmit = (e) => e.preventDefault();
@@ -61,12 +71,6 @@ class AudioFileForm extends React.Component {
 
     // clear any existing alerts
     ee.emit("alert", { type: false } );
-
-    // clear any existing information on old files
-    {/*
-    console.log("Loading in a new file!");
-    console.log(e);
-    */}
 
     // when a file is passed to the input field, retrieve the contents as a base64-encoded data URI and save it to the component's state
     var self = this;
@@ -120,7 +124,7 @@ class AudioFileForm extends React.Component {
   // whenever the scrubber is moved along the timeline, handleTimeUpdate triggers an update in
   // the BubbleViz UI by emitting an "audio:currentTimeDidUpdate" event
   handleTimeUpdate = (e) => {
-    console.log("Handle time update!");
+    // console.log("Handle time update!");
     // Round currentTime to a single decimal point so we don't display long decimals in the UI
     var new_time = parseFloat(e.target.currentTime).toFixed(1);
 

@@ -12,20 +12,12 @@ class AnnotationTable extends React.Component {
     }
   }
 
-  componentDidMount () {
-
-  }
-
   handleClick = (bubble) => {
-    console.log("Clicked on table row for bubble: ");
-    console.log(bubble);
-    ee.emit("audio:currentTimeDidUpdate", bubble.start_time); // tell BubbleViz component to update UI
-    ee.emit("audio:updateCurrentTimeAndPlay", bubble.start_time); // Tell AudioFileForm to update playback counter
+    ee.emit("audio:updateCurrentTimeAndPlay", bubble.start_time); // Tell AudioFileForm to update playback counter & play audio at the clicked bubble's start_time
   }
 
   handleEdit = (bubble) => {
-    console.log("Clicked on table row to edit bubble: ");
-    console.log(bubble);
+    ee.emit("audio:updateCurrentTime", bubble.start_time);
     ee.emit("bubble:editBubble", bubble);
   }
 

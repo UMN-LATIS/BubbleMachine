@@ -24,6 +24,7 @@ class BubbleViz extends React.Component {
   componentDidMount() {
     this.loadBubblesFromLocalStorage();
 
+    // Turn on event listeners here
 		ee.on("alert", (new_alert) => {
 			this.setState({ alert: new_alert });
 		});
@@ -32,14 +33,7 @@ class BubbleViz extends React.Component {
       this.setState({ audio_duration: duration });
     });
 
-    ee.on("audio:currentTimeDidUpdate", (currentTime) => {
-      //console.log("Updating time in BubbleViz to: " + currentTime);
-      this.setState({ current_time: currentTime });
-    });
-
     ee.on("bubble:createBubble", (bubble) => {
-      console.log("Creating a new bubble: ");
-      console.log(bubble);
       this.createBubble(bubble);
     });
 
@@ -58,9 +52,9 @@ class BubbleViz extends React.Component {
   }
 
   componentWillUnmount() {
+    // Turn off event listeners here
     ee.off("alert");
     ee.off("audio:updateDuration");
-    ee.off("audio:currentTimeDidUpdate");
     ee.off("bubble:createBubble");
     ee.off("bubble:updateBubble");
     ee.off("bubble:deleteBubble");
@@ -168,7 +162,7 @@ class BubbleViz extends React.Component {
         </div>
 
         <div className="row">
-          <Bubbles data={this.state.data} audioDuration={this.state.audio_duration} currentTime={this.state.current_time} />
+          <Bubbles data={this.state.data} audioDuration={this.state.audio_duration} />
         </div>
 
         <div className="row">

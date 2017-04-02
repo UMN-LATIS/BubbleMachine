@@ -16,8 +16,7 @@ class Bubble extends React.Component {
   handleClick = () => {
     //console.log("Clicked on bubble: ");
     //console.log(this.props.bubbleData);
-    ee.emit("audio:currentTimeDidUpdate", this.props.bubbleData.start_time); // tell BubbleViz component to update UI
-    ee.emit("audio:updateCurrentTimeAndPlay", this.props.bubbleData.start_time); // Tell AudioFileForm to update playback counter
+    ee.emit("audio:updateCurrentTimeAndPlay", this.props.bubbleData.start_time); // Tell AudioFileForm to update playback counter & play audio at the clicked bubble's start_timer
   }
 
   render() {

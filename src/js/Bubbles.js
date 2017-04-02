@@ -19,7 +19,8 @@ class Bubbles extends React.Component {
         level: "",
         start_time: "",
         stop_time: ""
-      }
+      },
+      current_time: 0.0
     }
   }
 
@@ -27,11 +28,20 @@ class Bubbles extends React.Component {
     this.resizeViz(); // call resizeViz() function to set the viz_width to equal the current window width
     window.addEventListener('resize', this.resizeViz); // if the user resizes their browser window, reset the viz_width
 
+    ee.on("audio:currentTimeDidUpdate", (currentTime) => {
+      this.setState({ current_time: currentTime });
+    });
+
     // When the AnnotationForm emits a "bubble:updateBubblePreview" event, change the state in this component to reflect the changes and display them in previewBubble
     ee.on("bubble:updateBubblePreview", (bubble) => {
       console.log("Updating preview!");
       this.setState({ preview_bubble_data: bubble });
     });
+  }
+
+  componentWillUnmount() {
+    ee.off("audio:currentTimeDidUpdate");
+    ee.off("bubble:updateBubblePreview");
   }
 
   resizeViz = () => {
@@ -45,14 +55,12 @@ class Bubbles extends React.Component {
 
     // Note: The arrow function "(bubble) =>" below makes sure we can reference
     // "this" inside of the this.props.data.map function, which allows us to invoke
-    // this.props.currentTime and this.props.audioDuration
+    // this.props.audioDuration
     var bubbleNodes = this.props.data.map((bubble) => {
       // If the current playback time is within the bubble's time span, highlight the bubble by marking it highlight={true}
-      if (bubble.start_time < this.props.currentTime && bubble.stop_time > this.props.currentTime) {
-        //console.log("Current time is: ");
-        //console.log(this.props.currentTime);
-        //console.log("Highlighting bubble w/ start_time " + bubble.start_time + " and stop_time " + bubble.stop_time);
-        return (
+      //if (bubble.start_time < this.props.currentTime && bubble.stop_time > this.props.currentTime) {
+      if (bubble.start_time < this.state.current_time && bubble.stop_time > this.state.current_time) {
+        return(
           <Bubble key={bubble.id} bubbleData={bubble} highlight={true} preview={false} audioDuration={this.props.audioDuration} vizWidth={this.state.viz_width} />
         )
       } else {
