@@ -5,6 +5,7 @@ import AudioFileForm from "./AudioFileForm";
 import Bubbles from "./Bubbles";
 import AnnotationTable from "./AnnotationTable";
 import AnnotationForm from "./AnnotationForm";
+import DataImportForm from "./DataImportForm";
 import DataExportForm from "./DataExportForm";
 
 import ee from "./EventEmitter";
@@ -28,6 +29,10 @@ class BubbleViz extends React.Component {
 		ee.on("alert", (new_alert) => {
 			this.setState({ alert: new_alert });
 		});
+
+    ee.on("importData", (data) => {
+      this.importBubbleData(data);
+    });
 
     ee.on("audio:updateDuration", (duration) => {
       this.setState({ audio_duration: duration });
@@ -176,6 +181,7 @@ class BubbleViz extends React.Component {
           </div>
 
           <div className="col-md-3">
+            <DataImportForm />
             <DataExportForm data={this.state.data} />
           </div>
 

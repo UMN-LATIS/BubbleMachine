@@ -5,6 +5,8 @@ import browserify from "browserify";
 import babelify from "babelify";
 import source from "vinyl-source-stream";
 import concat from "gulp-concat";
+import uglify from 'gulp-uglify';
+import sourcemaps from 'gulp-sourcemaps';
 
 // "Build" task:
 // Takes all .jsx files stored in src/js/ that are written in React + ES6 and

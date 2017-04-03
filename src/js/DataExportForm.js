@@ -4,6 +4,8 @@ import ReactDOM from "react-dom";
 import FileSaver from 'file-saver';
 import Baby from 'babyparse';
 
+import ee from "./EventEmitter";
+
 class DataExportForm extends React.Component {
   constructor(props) {
     super(props);
