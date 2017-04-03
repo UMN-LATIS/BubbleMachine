@@ -31,7 +31,7 @@ class DataExportForm extends React.Component {
     console.log(tempLink);
 
     // Test user's browser support for download links; if supported, use the following:
-    if (typeof tempLink.download !== undefined) {
+    if (typeof tempLink.download != "undefined") {
       tempLink.target = '_blank';
       tempLink.href = "data:text/csv;charset=utf-8," + encodeURIComponent(csv);
       tempLink.download = user_filename;

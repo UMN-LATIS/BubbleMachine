@@ -8,10 +8,6 @@ import ee from "./EventEmitter";
 class DataImportForm extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      data_to_import: "" // Start with an empty string to hold data we want to import
-    }
   }
 
   handleSubmit = (e) => {
@@ -39,15 +35,14 @@ class DataImportForm extends React.Component {
           // Now, parse the string in event.target.result and convert to JSON using BabyParse (a node module forked from PapaParse library)
           var parsedData = Baby.parse(event.target.result, {header: true});
           console.log(parsedData);
-          ee.emit("importData", parsedData);
+          ee.emit("importData", parsedData.data);
         }, false);
 
-        reader.readAsText(file); // Read file into memory as UTF-8
-        //console.log(reader);
+        reader.addEventListener("error", function(event){
+          alert("Sorry! Couldn't read your file. Please try again.")
+        }, false);
 
-        //var loadedData = reader.result;
-        //reader.onload = this.parseLoadedData(reader.result);
-        //reader.onerror = errorHandler;
+        reader.readAsText(file); // Read file into memory as UTF-8 string
       } else {
         alert("Sorry! Can't read your file in this browser. Please switch to a newer version of Chrome or Firefox");
       }

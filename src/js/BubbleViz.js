@@ -26,12 +26,12 @@ class BubbleViz extends React.Component {
     this.loadBubblesFromLocalStorage();
 
     // Turn on event listeners here
-		ee.on("alert", (new_alert) => {
-			this.setState({ alert: new_alert });
+		ee.on("alert", (newAlert) => {
+			this.setState({ alert: newAlert });
 		});
 
-    ee.on("importData", (data) => {
-      this.importBubbleData(data);
+    ee.on("importData", (dataFromFile) => {
+      this.importBubbleData(dataFromFile);
     });
 
     ee.on("audio:updateDuration", (duration) => {
@@ -89,6 +89,28 @@ class BubbleViz extends React.Component {
     }
 
     this.setState({ data: allBubbles });
+  }
+
+  importBubbleData = (dataFromFile) => {
+    // Get existing bubble data from localStorage
+    // Note: localStorage should have been populated when invoking this.loadBubblesFromLocalStorage() inside of componentDidMount function
+    var allBubbles = JSON.parse(localStorage.getItem("bubbleMachineData"));
+
+    // if current "bubbleMachineData" object contains no pre-existing bubbles, then set data from file as the current "bubbleMachineData" object
+    if (allBubbles.length == 0){
+      localStorage.setItem("bubbleMachineData", JSON.stringify(dataFromFile));
+      this.setState({ data: dataFromFile }); // refresh the UI with the new data
+    } else {
+      // else if "bubbleMachineData" object already contains some bubbles, prompt user to cancel or overwrite
+      var user_confirm = confirm("It looks like you already have some bubbles saved in your browser. Importing bubbles from a file will overwrite these existing bubbles. Are you sure you want to continue?");
+
+      if (user_confirm) {
+        localStorage.setItem("bubbleMachineData", JSON.stringify(dataFromFile));
+        this.setState({ data: dataFromFile }); // refresh the UI with the new data
+      } else {
+        alert("Please save or delete any existing bubbles from your browser, then try importing your bubbles file again.");
+      }
+    }
   }
 
   createBubble = (bubble) => {
