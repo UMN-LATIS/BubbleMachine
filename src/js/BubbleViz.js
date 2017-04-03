@@ -5,6 +5,7 @@ import AudioFileForm from "./AudioFileForm";
 import Bubbles from "./Bubbles";
 import AnnotationTable from "./AnnotationTable";
 import AnnotationForm from "./AnnotationForm";
+import DataExportForm from "./DataExportForm";
 
 import ee from "./EventEmitter";
 
@@ -12,7 +13,6 @@ import ee from "./EventEmitter";
 class BubbleViz extends React.Component {
   constructor(props) {
     super(props);
-    // Operations usually carried out in componentWillMount go here
 
     this.state = {
       data: [],
@@ -170,11 +170,15 @@ class BubbleViz extends React.Component {
         </div>
 
         <div className="row">
-          <AnnotationForm audioDuration={this.state.audio_duration} />
-        </div>
+          <div className="col-md-9">
+            <AnnotationForm audioDuration={this.state.audio_duration} />
+            <AnnotationTable data={this.state.data} />
+          </div>
 
-        <div className="row">
-          <AnnotationTable data={this.state.data} />
+          <div className="col-md-3">
+            <DataExportForm data={this.state.data} />
+          </div>
+
         </div>
       </div>
     )

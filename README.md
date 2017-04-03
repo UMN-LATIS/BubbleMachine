@@ -6,7 +6,7 @@
 * React
 * ES6 (Babel)
 
-
+* Additional node modules listed in package.json
 
 
 ## Getting started
@@ -20,6 +20,7 @@ Install the node package dependencies for the app: `npm install`
 Compile the raw code in /src into working code in /dist that can be viewed in
 a web browser.
 
+## Development workflow
 
 You should _only_ change the code in the /src folder!  Then, gulp
 
@@ -36,7 +37,7 @@ JSX comments are weird:
 ```
 
 
-## Structure of the app components
+## Component structure overview
 
 |-- App
     |-- BubbleViz - loads bubble data from LocalStorage, manages edit and delete actions for bubbles
@@ -47,7 +48,7 @@ JSX comments are weird:
 
 
 
-## Events
+## Events structure overview
 
 ### Audio playback-related events
 
@@ -67,14 +68,14 @@ Role: Moves the playhead on the audio playback slider input and forces it to jum
 
 **"audio:currentTimeDidUpdate"**
 
-Role: Unlike the other two audio events, which actively force the playback slider to jump to a specific time, this is the "passive" event.  It triggers as the audio is playing back, letting other components know that the audio's currentTime has advanced so that the changes can be displayed in the UI.
+Role: Unlike the other two audio events, which actively force the playback slider to jump to a specific time, this is the "passive" event.  It triggers as the audio is playing back, letting other components know that the audio's currentTime has advanced so that highlights and other visual elements related to the current time can be displayed in the UI.
 
 * Source: AudioFileForm
 * Target: Bubbles
 
 **"audio:play"**
 
-Role: Allows the user to click the "play" button for a specific bubble in the AnnotationTable and trigger playback at that bubble's start_time.
+Role: Allows the user to click the "play" button for a specific bubble in the AnnotationTable and trigger playback at that bubble's start time.
 
 * Source: AnnotationTable
 * Target: AudioFileForm
@@ -108,6 +109,12 @@ Role: Delete a bubble and remove it from the browser's LocalStorage.
 * Source: AnnotationForm
 * Target: BubbleViz
 
+**"bubble:deleteAllBubbles"**
+
+Role: Delete all bubbles and replace them with an empty string in the browser's LocalStorage.
+
+* Source: AnnotationTable
+* Target: BubbleViz
 
 **"bubble:editBubble"**
 
@@ -116,10 +123,9 @@ Role: Allows the user to click the "Edit" button for a bubble in the AnnotationT
 * Source: AnnotationTable
 * Target: AnnotationForm
 
-
 **"bubble:updateBubblePreview"**
 
-Role: When a user adds/edits a bubble in the AnnotationForm, this event sends the attributes of the bubble that is currently being edited to the Bubbles component.  The Bubbles component then renders this as a "preview bubble" so the user can preview their changes on the fly as they are changing input on the AnnotationForm.
+Role: When a user adds/edits a bubble in the AnnotationForm, this event sends the updated attributes of the bubble that is currently being edited to the Bubbles component.  The Bubbles component then renders this as a "preview bubble" so the user can preview their changes on the fly as they are changing input on the AnnotationForm.
 
 * Source: AnnotationForm
 * Target: Bubbles
