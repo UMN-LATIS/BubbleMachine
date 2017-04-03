@@ -28,17 +28,20 @@
 ## Development workflow
 
 **Where should I be making changes to the code?**
+
 As you're developing, you should _only_ change the code in the src/ folder!  Then, make sure you run the `gulp` command in the terminal, and keep it running as you're changing the code.  Gulp will watch for changes in any of the files in the src/ folder, process/transpile them, and transfer them to the dist/ folder where you can preview the changes.
 
 **I think I changed something, but I'm not seeing it show up in the browser. What can I do?**
+
 Make sure the browser is actually refreshing and updating its cache when you change your code.  If you think you've changed some code but aren't seeing the changes in the browser, you may need to do [CTRL] + [R] to refresh.  Or, try a different browser.  
 
-Also check to make sure that Gulp is still running in the terminal and watching for changes.  Gulp will error out if you make a code mistake in your React components, and will try to give you a helpful hint about which line it broke on.  So, pay attention to that
+Also check to make sure that Gulp is still running in the terminal and watching for changes.  Gulp will error out if you make a code mistake in your React components, and will try to give you a helpful hint about which line it broke on.  So, pay attention to Gulp's hints to help you troubleshoot your code.
 
 **What the heck is React?  Is it JavaScript?  How do I use it?**
+
 React is a JavaScript library that also offers some special features for structuring code into "components" and moving information back and forth between components.  It was developed by Facebook, and it's designed to offer a zippy, "reactive"-feeling user interface for web apps.
 
-As you dig into React will want to make sure you understand a few key concepts:
+As you dig into React, you will want to make sure you understand a few key concepts:
 
 * "components" - React UI elements
 * "state" - data that can be updated dynamically within a component and used to change the way things are displayed within a component
@@ -96,15 +99,15 @@ Here is a brief description of each of the events being used in the app, their r
 
 Toggles on and off alerts to be displayed in the "alert" section at the top of the BubbleViz component.
 
-Source: multiple components
-Target: BubbleViz
+* Source: multiple components
+* Target: BubbleViz
 
 **"importData"**
 
 When data is being imported from CSV file, trigger the BubbleViz component to complete the import process and save the results to localStorage so the user can work with it within the visualization.
 
-Source: DataImportForm
-Target: BubbleViz
+* Source: DataImportForm
+* Target: BubbleViz
 
 **"audio:updateCurrentTime"**
 
