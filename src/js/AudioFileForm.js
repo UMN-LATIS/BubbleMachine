@@ -14,14 +14,16 @@ class AudioFileForm extends React.Component {
       current_time: 0.0
     }
 
-    // Not sure if we need these if we're using arrow functions "=>" in the function definitions below,
+    // Probably don't need these if we're using arrow functions "=>" in the function definitions below,
     // but we'll put them here to be safe
+    /*
     this.handleFile = this.handleFile.bind(this)
     this.startLoadingAudio = this.startLoadingAudio.bind(this)
     this.doneLoadingMetadata = this.doneLoadingMetadata.bind(this)
     this.doneLoadingAudio = this.doneLoadingAudio.bind(this)
     this.playAudio = this.playAudio.bind(this)
     this.handleTimeUpdate = this.handleTimeUpdate.bind(this)
+    */
   }
 
   componentDidMount () {
@@ -45,22 +47,12 @@ class AudioFileForm extends React.Component {
         });
       });
 
-      ee.on("audio:play", () => {
-        this.playAudio();
-      });
-
-      ee.on("audio:pause", () => {
-        this.pauseAudio();
-      });
-
     }, 2000);
   }
 
   componentWillUnmount() {
     ee.off("audio:updateCurrentTime");
     ee.off("audio:updateCurrentTimeAndPlay");
-    ee.off("audio:play");
-    ee.off("audio:pause");
   }
 
   handleSubmit = (e) => e.preventDefault();

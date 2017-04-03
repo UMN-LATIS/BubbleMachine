@@ -59,6 +59,7 @@ class BubbleViz extends React.Component {
   componentWillUnmount() {
     // Turn off event listeners here
     ee.off("alert");
+    ee.on("importData");
     ee.off("audio:updateDuration");
     ee.off("bubble:createBubble");
     ee.off("bubble:updateBubble");
